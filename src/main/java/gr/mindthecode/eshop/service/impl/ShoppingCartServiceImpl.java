@@ -1,0 +1,138 @@
+package gr.mindthecode.eshop.service.impl;
+
+import gr.mindthecode.eshop.dto.NewOrderDto;
+import gr.mindthecode.eshop.dto.ProductQuantity;
+import gr.mindthecode.eshop.model.Orders;
+import gr.mindthecode.eshop.model.Product;
+import gr.mindthecode.eshop.model.ShoppingCart;
+import gr.mindthecode.eshop.model.ShoppingCartPK;
+import gr.mindthecode.eshop.repository.OrdersRepository;
+import gr.mindthecode.eshop.repository.ProductRepository;
+import gr.mindthecode.eshop.repository.ShoppingCartRepository;
+import gr.mindthecode.eshop.service.ShoppingCartService;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class ShoppingCartServiceImpl implements ShoppingCartService {
+
+    private ProductRepository productRepository;
+    private OrdersRepository ordersRepository;
+    private ShoppingCartRepository shoppingCartRepository;
+
+    private Collection<ProductQuantity> productQuantity;
+    private NewOrderDto newOrderDto;
+
+    public ShoppingCartServiceImpl(ProductRepository productRepository, OrdersRepository ordersRepository, ShoppingCartRepository shoppingCartRepository) {
+        this.productRepository = productRepository;
+        this.ordersRepository = ordersRepository;
+        this.shoppingCartRepository = shoppingCartRepository;
+
+        this.productQuantity = new ArrayList<>();
+        this.newOrderDto = new NewOrderDto();
+    }
+
+    @Override
+    @Transactional
+    public NewOrderDto createOrder(NewOrderDto newOrderDto) {
+        Orders order = new Orders();
+        order.setAddress(newOrderDto.getAddress());
+        ordersRepository.save(order);
+        Double totalCost = 0.0;
+
+        ArrayList<ProductQuantity> products = (ArrayList<ProductQuantity>) newOrderDto.getProducts();
+        for(int i=0;i<products.size();i++){
+            Integer tmp = products.get(i).getProductId();
+            //Check if product exists
+            Optional<Product> check = productRepository.findById(tmp);
+            if(check.isEmpty()){
+                throw new RuntimeException("Product doesnot exist");
+            }
+            Integer quantity = products.get(i).getQuantity();
+            totalCost=totalCost + (check.get().getProductPrice() * quantity);
+
+            ShoppingCartPK shoppingCartPK = new ShoppingCartPK();
+            shoppingCartPK.setOrdersId(order.getOrdersId());
+            shoppingCartPK.setProductId(check.get().getProductId());
+
+            ShoppingCart shoppingCart = new ShoppingCart();
+            shoppingCart.setId(shoppingCartPK);
+            shoppingCart.setOrder(order);
+            shoppingCart.setProducts(check.get());
+            shoppingCart.setQuantity(quantity);
+            shoppingCartRepository.save(shoppingCart);
+
+        }
+
+        order.setTotalCost(totalCost);
+        ordersRepository.save(order);
+
+        return newOrderDto;
+    }
+
+    @Override
+    public void addProductQuantity(Integer id) {
+        /*Product product = productRepository.findByProductId(id);
+
+        //Check if product exist already
+        List<ProductQuantity> search = this.productQuantity.stream().toList();
+        for(int i=0;i<search.size();i++){
+
+            if(search.get(i).getProductId()==id){
+                search.get(i).setQuantity(search.get(i).getQuantity()+1);
+                product.setOrderQuantity(search.get(i).getQuantity());
+                productRepository.save(product);
+                return;
+            }
+        }
+        ProductQuantity tmp = new ProductQuantity();
+        tmp.setProductId(id);
+        tmp.setQuantity(1);
+        this.productQuantity.add(tmp);
+
+
+        product.setOrderQuantity(tmp.getQuantity());
+        productRepository.save(product);
+        */
+    }
+
+
+    @Override
+    public void buildNewOrderDto(String address, Collection<ProductQuantity> productQuantity) {
+        //newOrderDto.setAddress(address);
+        //newOrderDto.setProducts(productQuantity);
+    }
+
+    @Override
+    public List<ShoppingCart> findAll() {
+        return shoppingCartRepository.findAll();
+    }
+
+    @Override
+    public NewOrderDto getNewOrderDto() {
+        return newOrderDto;
+    }
+
+    @Override
+    public Collection<ProductQuantity> getProductQuantity() {
+        return this.productQuantity;
+    }
+
+    @Override
+    public void reset() {
+        /*for(int i=0;i<productQuantity.size();i++){
+            Product tmp = productRepository.findByProductId(productQuantity.stream().toList().get(i).getProductId());
+            tmp.setOrderQuantity(0);
+            productRepository.save(tmp);
+        }
+        this.productQuantity.clear();
+        */
+
+    }
+
+}
