@@ -45,6 +45,26 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductDTO updateProduct(Integer id,ProductDTO productDTO) {
+        Product product = productRepository.findByProductId(id);
+        Optional<Category> category = categoryRepository.findByCategoryDescription(productDTO.getCategoryDescription());
+        Category newCat = new Category();
+        newCat.setCategoryDescription(productDTO.getCategoryDescription());
+
+        if(category.isEmpty()){
+            categoryRepository.save(newCat);
+        }
+
+        product.setProductDescription(productDTO.getProductDescription());
+        product.setProductPrice(productDTO.getProductPrice());
+        product.setCategory(category.get());
+
+        productRepository.save(product);
+
+        return productDTO;
+    }
+
+    @Override
     public void deleteProduct(Integer id) {
         Product match = productRepository.findById(id).orElseThrow();
         productRepository.delete(match);

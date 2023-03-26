@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 
 public interface ProductService {
     ProductDTO createProduct(ProductDTO product);
+    ProductDTO updateProduct(Integer id,ProductDTO product);
     void deleteProduct(Integer id);
     public abstract Product getProductById(Integer id);
     Page<Product> getProducts(String description,
