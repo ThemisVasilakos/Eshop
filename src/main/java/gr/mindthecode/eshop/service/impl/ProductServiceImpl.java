@@ -28,16 +28,17 @@ public class ProductServiceImpl implements ProductService {
 
         Product newPro = new Product();
         Optional<Category> category = categoryRepository.findByCategoryDescription(productDTO.getCategoryDescription());
-        Category newCat = new Category();
-        newCat.setCategoryDescription(productDTO.getCategoryDescription());
 
-        if(category.isEmpty()){
-            categoryRepository.save(newCat);
+        if(category.isPresent()){
+            newPro.setCategory(category.get());
+        }else{
+            Category newCat = new Category();
+            newCat.setCategoryDescription(productDTO.getCategoryDescription());
+            newPro.setCategory(newCat);
         }
 
         newPro.setProductDescription(productDTO.getProductDescription());
         newPro.setProductPrice(productDTO.getProductPrice());
-        newPro.setCategory(category.get());
 
         productRepository.save(newPro);
 
@@ -48,16 +49,17 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO updateProduct(Integer id,ProductDTO productDTO) {
         Product product = productRepository.findByProductId(id);
         Optional<Category> category = categoryRepository.findByCategoryDescription(productDTO.getCategoryDescription());
-        Category newCat = new Category();
-        newCat.setCategoryDescription(productDTO.getCategoryDescription());
 
-        if(category.isEmpty()){
-            categoryRepository.save(newCat);
+        if(category.isPresent()){
+            product.setCategory(category.get());
+        }else{
+            Category newCat = new Category();
+            newCat.setCategoryDescription(productDTO.getCategoryDescription());
+            product.setCategory(newCat);
         }
 
         product.setProductDescription(productDTO.getProductDescription());
         product.setProductPrice(productDTO.getProductPrice());
-        product.setCategory(category.get());
 
         productRepository.save(product);
 
