@@ -2,7 +2,7 @@ package gr.mindthecode.eshop.security;
 
 import gr.mindthecode.eshop.security.jwt.CustomJwtAuthenticationFilter;
 import gr.mindthecode.eshop.security.jwt.JwtAuthenticationEntryPoint;
-import gr.mindthecode.eshop.service.CustomUserDetailService;
+import gr.mindthecode.eshop.service.impl.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

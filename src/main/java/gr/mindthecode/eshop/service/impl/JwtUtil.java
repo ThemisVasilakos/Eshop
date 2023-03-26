@@ -1,4 +1,4 @@
-package gr.mindthecode.eshop.service;
+package gr.mindthecode.eshop.service.impl;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;

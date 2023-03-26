@@ -1,4 +1,4 @@
-package gr.mindthecode.eshop.service;
+package gr.mindthecode.eshop.service.impl;
 
 import gr.mindthecode.eshop.dto.UserDTO;
 import gr.mindthecode.eshop.model.User;

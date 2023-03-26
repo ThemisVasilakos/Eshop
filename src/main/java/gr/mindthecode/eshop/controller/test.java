@@ -2,15 +2,10 @@ package gr.mindthecode.eshop.controller;
 
 import gr.mindthecode.eshop.dto.ProductDTO;
 import gr.mindthecode.eshop.model.Category;
-import gr.mindthecode.eshop.model.Product;
 import gr.mindthecode.eshop.service.CategoryService;
 import gr.mindthecode.eshop.service.ProductService;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class test {
