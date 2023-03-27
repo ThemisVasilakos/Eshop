@@ -9,6 +9,8 @@ import gr.mindthecode.eshop.repository.ShoppingCartRepository;
 import gr.mindthecode.eshop.repository.UserRepository;
 import gr.mindthecode.eshop.service.ShoppingCartService;
 import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -153,6 +155,43 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         newOrderDto.setTotalCost(order.get().getTotalCost());
 
         return newOrderDto;
+    }
+
+    @Override
+    public NewOrderDto removeFromCart(Integer productId) {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String username = loggedInUser.getName();
+
+        User user =  userRepository.findByUsername(username);
+
+        Optional<Orders> order = ordersRepository.findByStatusAndUsers("pending",user);
+        if(order.isEmpty()){
+            throw new RuntimeException("Order not found");
+        }
+
+        List<ShoppingCart> carts = shoppingCartRepository.findAll();
+        for(int i=0;i<carts.size();i++) {
+            if (carts.get(i).getId().getOrdersId() == order.get().getOrdersId()) {
+                if (productId == carts.get(i).getId().getProductId()) {
+
+                    Integer quantity = carts.get(i).getQuantity();
+                    Double totalPrice = order.get().getTotalCost();
+                    Optional<Product> tmp = productRepository.findById(carts.get(i).getId().getProductId());
+                    if(tmp.isEmpty()){
+                        throw new RuntimeException("Product didnot found");
+                    }
+                    Double reducedPrice = tmp.get().getProductPrice() * quantity;
+                    Double finalPrice = totalPrice - reducedPrice;
+
+                    order.get().setTotalCost(finalPrice);
+                    ordersRepository.save(order.get());
+
+                    shoppingCartRepository.delete(carts.get(i));
+                }
+            }
+
+        }
+        return getCart();
     }
 
 }

@@ -11,5 +11,6 @@ import java.util.List;
 public interface ShoppingCartService {
     NewOrderDto getCart();
     ShoppingCart addToCart(Integer productId,int quantity);
+    NewOrderDto removeFromCart(Integer productId);
     Orders  sendOrder(String address);
 }
