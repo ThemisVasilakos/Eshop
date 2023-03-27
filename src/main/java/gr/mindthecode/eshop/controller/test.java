@@ -1,7 +1,6 @@
 package gr.mindthecode.eshop.controller;
 
 import gr.mindthecode.eshop.dto.NewOrderDto;
-import gr.mindthecode.eshop.dto.ProductQuantity;
 import gr.mindthecode.eshop.model.Orders;
 import gr.mindthecode.eshop.model.Product;
 import gr.mindthecode.eshop.model.ShoppingCart;
