@@ -3,6 +3,7 @@ package gr.mindthecode.eshop.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.context.annotation.Lazy;
+
 @Entity
 public class ShoppingCart {
 
@@ -21,11 +22,18 @@ public class ShoppingCart {
     @JsonIgnore
     private Product products;
 
-    @ManyToOne
+    /*@ManyToOne
     @Lazy(false)
     @MapsId("id")
     @JsonIgnore
-    private User user;
+
+     */
+    @ManyToOne( cascade = {CascadeType.PERSIST})
+    @JoinColumn(
+            name="user_id",
+            referencedColumnName = "userId"
+    )
+    private User users;
 
     private Integer quantity;
 
@@ -34,7 +42,6 @@ public class ShoppingCart {
     }
 
     //Getters and Setters
-
 
     public ShoppingCartPK getId() {
         return id;
@@ -66,5 +73,13 @@ public class ShoppingCart {
 
     public void setProducts(Product products) {
         this.products = products;
+    }
+
+    public User getUser() {
+        return users;
+    }
+
+    public void setUser(User user) {
+        this.users = user;
     }
 }

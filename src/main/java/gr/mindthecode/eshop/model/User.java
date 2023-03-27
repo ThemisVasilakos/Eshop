@@ -13,7 +13,7 @@ import java.util.Collection;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer UserId;
 
     private String username;
 
@@ -21,16 +21,16 @@ public class User {
 
     private String role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    /*@OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnore
     private Collection<ShoppingCart> shoppingCarts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnore
     private Collection<Orders> ordersList = new ArrayList<>();
-
+*/
     //Getters and Setters
 
     public String getRole() {
@@ -57,7 +57,7 @@ public class User {
         this.password = password;
     }
 
-    public Collection<ShoppingCart> getShoppingCarts() {
+    /*public Collection<ShoppingCart> getShoppingCarts() {
         return shoppingCarts;
     }
 
@@ -72,4 +72,6 @@ public class User {
     public void setOrdersList(Collection<Orders> ordersList) {
         this.ordersList = ordersList;
     }
+
+     */
 }

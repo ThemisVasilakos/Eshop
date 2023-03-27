@@ -20,16 +20,25 @@ public class Orders {
 
     private String address;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnore
     private Collection<ShoppingCart> orderProducts = new ArrayList<>();
 
-    @ManyToOne
+    /*@ManyToOne(cascade = CascadeType.PERSIST)
     @Lazy(false)
     @MapsId("id")
     @JsonIgnore
-    private User user;
+    */
+    @ManyToOne( cascade = {CascadeType.PERSIST})
+    @JoinColumn(
+            name="user_id",
+            referencedColumnName = "userId"
+    )
+    private User users;
+
+
+    private String status;
 
     //Getters and Setters
 
@@ -66,10 +75,18 @@ public class Orders {
     }
 
     public User getUser() {
-        return user;
+        return users;
     }
 
     public void setUser(User user) {
-        this.user = user;
+        this.users = user;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

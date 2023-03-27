@@ -3,7 +3,6 @@ package gr.mindthecode.eshop.service.impl;
 import gr.mindthecode.eshop.model.Product;
 import gr.mindthecode.eshop.repository.ProductRepository;
 import gr.mindthecode.eshop.service.ProductService;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

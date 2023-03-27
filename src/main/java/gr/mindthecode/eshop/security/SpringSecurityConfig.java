@@ -59,12 +59,13 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests().requestMatchers ("/helloadmin").hasRole("ADMIN")
                 .requestMatchers ("/hellomod").hasRole("MODERATOR")
                 .requestMatchers ("/hellouser").hasAnyRole("USER","ADMIN")
-                .requestMatchers ("/eshop/login","/eshop/register","/product","/category")
+                .requestMatchers ("/eshop/login","/eshop/register","/product","/product/add","/orders",
+                        "/cart/checkout"
+                )
                 .permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
                 and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(customJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }

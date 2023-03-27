@@ -25,6 +25,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Orders> findByStatus() {
+        return ordersRepository.findByStatus("pending");
+    }
+
+    @Override
     public Page<Orders> getOrders(String address, int page, int size, String sort) {
         PageRequest paging = PageRequest
                 .of(page, size)
