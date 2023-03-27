@@ -60,7 +60,7 @@ public class SpringSecurityConfig {
                 .requestMatchers ("/hellomod").hasRole("MODERATOR")
                 .requestMatchers ("/hellouser").hasAnyRole("USER","ADMIN")
                 .requestMatchers ("/eshop/login","/eshop/register","/product","/product/add","/orders",
-                        "/cart/checkout","/cart"
+                        "/cart/checkout","/cart","/cart/remove"
                 )
                 .permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).

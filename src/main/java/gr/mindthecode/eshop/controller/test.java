@@ -85,4 +85,9 @@ public class test {
         return shoppingCartService.getCart();
     }
 
+    @DeleteMapping("/cart/remove")
+    public NewOrderDto getCart(@RequestParam Integer productId){
+        return shoppingCartService.removeFromCart(productId);
+    }
+
 }
