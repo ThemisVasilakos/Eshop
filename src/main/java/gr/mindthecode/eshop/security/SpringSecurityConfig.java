@@ -56,11 +56,11 @@ public class SpringSecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests().requestMatchers ("/helloadmin").hasRole("ADMIN")
-                .requestMatchers ("/hellomod").hasRole("MODERATOR")
-                .requestMatchers ("/hellouser").hasAnyRole("USER","ADMIN")
-                .requestMatchers ("/eshop/login","/eshop/register","/product","/product/add","/orders",
-                        "/cart/checkout","/cart","/cart/remove"
+                .authorizeHttpRequests().requestMatchers ("/eshop/products/create-or-update",
+                        "/eshop/products/delete/{id}","/eshop/orders")
+                .hasRole("ADMIN")
+                .requestMatchers ("/eshop/login","/eshop/register","eshop/products/{id}","/eshop/cart",
+                        "/eshop/cart/add","/eshop/cart/remove","/eshop/cart/checkout"
                 )
                 .permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).

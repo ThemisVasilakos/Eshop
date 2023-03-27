@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OrderService {
     List<Orders> findAll();
-    List<Orders> findByStatus();
+    Page<Orders> findByStatus(int page, int size, String sort);
     Page<Orders> getOrders(String address,
                            int page,
                            int size,

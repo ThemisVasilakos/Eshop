@@ -110,7 +110,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new RuntimeException("Order not found");
         }
         order.get().setAddress(address);
-        order.get().setStatus("completed");
+        order.get().setStatus("submitted");
         ordersRepository.save(order.get());
 
         return order.get();

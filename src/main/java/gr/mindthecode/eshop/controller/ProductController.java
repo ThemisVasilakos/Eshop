@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/eshop/products")
 public class ProductController {
     private ProductService productService;
 

@@ -7,7 +7,7 @@ import gr.mindthecode.eshop.service.ShoppingCartService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/eshop")
 public class ShoppingCartController {
 
     private ShoppingCartService shoppingCartService;
@@ -16,23 +16,23 @@ public class ShoppingCartController {
         this.shoppingCartService = shoppingCartService;
     }
 
-    @GetMapping("/view")
+    @GetMapping("/cart")
     public NewOrderDto getCart(){
         return shoppingCartService.getCart();
     }
 
-    @PostMapping("/product/add")
+    @PostMapping("/cart/add")
     public ShoppingCart addToCart(@RequestParam Integer productId
             , @RequestParam(defaultValue = "0") int quantity){
         return shoppingCartService.addToCart(productId,quantity);
     }
 
-    @DeleteMapping("/remove")
+    @DeleteMapping("/cart/remove")
     public NewOrderDto removeFromCart(@RequestParam Integer productId){
         return shoppingCartService.removeFromCart(productId);
     }
 
-    @PostMapping("/checkout")
+    @PostMapping("/cart/checkout")
     public Orders sendOrder(@RequestParam String address){
         return shoppingCartService.sendOrder(address);
     }

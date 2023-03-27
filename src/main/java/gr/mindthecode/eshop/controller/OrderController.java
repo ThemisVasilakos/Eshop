@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/eshop")
 public class OrderController {
 
     private OrderService orderService;
@@ -21,23 +21,13 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/all")
-    public List<Orders> getAllOrders(){
-        return orderService.findAll();
-    }
-
-    @GetMapping("/status/completed")
-    public List<Orders> getOrdersByStatus(){
-        return orderService.findByStatus();
-    }
-
-    @GetMapping("/index")
-    public Page<Orders> getOrderIndex(
-            @RequestParam(required = false) String orderAddress,
+    @GetMapping("/orders")
+    public Page<Orders> getOrdersByStatus(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size,
             @RequestParam(defaultValue = "ASC", required = false) String sort
     ){
-        return orderService.getOrders(orderAddress, page, size, sort);
+        return orderService.findByStatus(page, size, sort);
     }
+
 }
