@@ -1,69 +1,30 @@
 package gr.mindthecode.eshop.service.impl;
 
-import gr.mindthecode.eshop.dto.ProductDTO;
-import gr.mindthecode.eshop.model.Category;
 import gr.mindthecode.eshop.model.Product;
-import gr.mindthecode.eshop.repository.CategoryRepository;
 import gr.mindthecode.eshop.repository.ProductRepository;
 import gr.mindthecode.eshop.service.ProductService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
-    private CategoryRepository categoryRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository,CategoryRepository categoryRepository) {
+    public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
     }
 
     @Override
-    public ProductDTO createProduct(ProductDTO productDTO){
-
-        Product newPro = new Product();
-        Optional<Category> category = categoryRepository.findByCategoryDescription(productDTO.getCategoryDescription());
-
-        if(category.isPresent()){
-            newPro.setCategory(category.get());
-        }else{
-            Category newCat = new Category();
-            newCat.setCategoryDescription(productDTO.getCategoryDescription());
-            newPro.setCategory(newCat);
+    public Product createOrUpdateProduct(Integer id,Product product) throws Exception {
+        if (id != null) {
+            if (!id.equals(product.getProductId())) {
+                throw new Exception("id in path does not patch id in body");
+            }
         }
-
-        newPro.setProductDescription(productDTO.getProductDescription());
-        newPro.setProductPrice(productDTO.getProductPrice());
-
-        productRepository.save(newPro);
-
-        return productDTO;
-    }
-
-    @Override
-    public ProductDTO updateProduct(Integer id,ProductDTO productDTO) {
-        Product product = productRepository.findByProductId(id);
-        Optional<Category> category = categoryRepository.findByCategoryDescription(productDTO.getCategoryDescription());
-
-        if(category.isPresent()){
-            product.setCategory(category.get());
-        }else{
-            Category newCat = new Category();
-            newCat.setCategoryDescription(productDTO.getCategoryDescription());
-            product.setCategory(newCat);
-        }
-
-        product.setProductDescription(productDTO.getProductDescription());
-        product.setProductPrice(productDTO.getProductPrice());
-
-        productRepository.save(product);
-
-        return productDTO;
+        return productRepository.save(product);
     }
 
     @Override
@@ -78,18 +39,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> getProducts(String description, int page, int size, String sort) {
+    public Page<Product> getProducts(String description,String category,int page, int size, String sort) {
         PageRequest paging = PageRequest
                 .of(page, size)
                 .withSort(sort.equalsIgnoreCase("ASC") ?
                         Sort.by("productPrice").ascending() :
                         Sort.by("productPrice").descending());
 
-        Page<Product> res;
-        if (description == null) {
+        Page<Product> res = null;
+        if (description == null && category == null) {
             res = productRepository.findAll(paging);
-        } else {
-            res = productRepository.findByProductDescriptionContaining(description,paging);
+        }
+        if (description != null && category == null) {
+            res = productRepository.findByProductDescriptionContaining(description, paging);
+        }
+        if (category != null && description == null) {
+            res = productRepository.findByCategoryContaining(category,paging);
+        }
+        if (category != null && description != null) {
+            res = productRepository.findByCategoryContainingAndProductDescriptionContaining(category, description, paging);
         }
 
         return res;

@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findByProductDescriptionContaining(String description, Pageable pageable);
+    Page<Product> findByCategoryContaining(String category, Pageable pageable);
+    Page<Product> findByCategoryContainingAndProductDescriptionContaining(String category,String description,Pageable pageable);
     Product findByProductId(Integer id);
-    Product findByProductDescription(String descr);
     List<Product> findAll();
 }

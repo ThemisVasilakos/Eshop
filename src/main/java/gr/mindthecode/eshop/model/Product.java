@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.springframework.context.annotation.Lazy;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +17,8 @@ public class Product {
 
     private String productDescription;
 
+    private String category;
+
     private Double productPrice;
 
 
@@ -25,11 +26,6 @@ public class Product {
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnore
     private Collection<ShoppingCart> orderProducts = new ArrayList<>();
-
-    @ManyToOne
-    @Lazy(false)
-    @MapsId("category_id")
-    private Category category;
 
     //Constructor
     public Product() {
@@ -69,11 +65,11 @@ public class Product {
         this.orderProducts = orderProducts;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 }
