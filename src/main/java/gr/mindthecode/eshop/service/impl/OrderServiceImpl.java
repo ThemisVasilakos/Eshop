@@ -25,8 +25,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Orders> findByStatus() {
-        return ordersRepository.findByStatus("completed");
+    public Page<Orders> findByStatus(int page, int size, String sort) {
+        PageRequest paging = PageRequest
+                .of(page, size)
+                .withSort(sort.equalsIgnoreCase("ASC") ?
+                        Sort.by("totalCost").ascending() :
+                        Sort.by("totalCost").descending());
+
+        Page<Orders> res = ordersRepository.findByStatus("submitted",paging);
+        return res;
     }
 
     @Override
