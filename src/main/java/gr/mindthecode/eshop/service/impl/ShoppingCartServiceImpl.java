@@ -57,16 +57,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if(order.isPresent()){
             finalOrder = order.get();
 
+            /*
             //Check if the cart has the same product again and increasing quantity
             List<ShoppingCart> carts = shoppingCartRepository.findAll();
             for(int i=0;i<carts.size();i++){
                 if(carts.get(i).getId().getOrdersId()==finalOrder.getOrdersId()){
                     if(productId == carts.get(i).getId().getProductId()){
-                        carts.get(i).setQuantity(carts.get(i).getQuantity()+quantity);
+                        Integer finalQuantity = carts.get(i).getQuantity()+quantity;
+                        System.out.println(finalQuantity);
+                        carts.get(i).setQuantity(finalQuantity);
                         shoppingCartRepository.save(carts.get(i));
                     }
                 }
-            }
+            }*/
 
             totalCost = finalOrder.getTotalCost();
             totalCost+=check.get().getProductPrice()*quantity;
