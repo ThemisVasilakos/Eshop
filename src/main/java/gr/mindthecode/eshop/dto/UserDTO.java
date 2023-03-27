@@ -1,6 +1,8 @@
 package gr.mindthecode.eshop.dto;
 
-public class UserDTO {
+import java.io.Serializable;
+
+public class UserDTO implements Serializable {
     private String username;
     private String password;
     private String role;

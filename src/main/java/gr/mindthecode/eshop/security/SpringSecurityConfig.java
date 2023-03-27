@@ -2,7 +2,7 @@ package gr.mindthecode.eshop.security;
 
 import gr.mindthecode.eshop.security.jwt.CustomJwtAuthenticationFilter;
 import gr.mindthecode.eshop.security.jwt.JwtAuthenticationEntryPoint;
-import gr.mindthecode.eshop.service.CustomUserDetailService;
+import gr.mindthecode.eshop.service.impl.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,11 +59,13 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests().requestMatchers ("/helloadmin").hasRole("ADMIN")
                 .requestMatchers ("/hellomod").hasRole("MODERATOR")
                 .requestMatchers ("/hellouser").hasAnyRole("USER","ADMIN")
-                .requestMatchers ("/login","/register").permitAll().anyRequest().authenticated()
+                .requestMatchers ("/eshop/login","/eshop/register","/product","/product/add","/orders",
+                        "/cart/checkout","/cart"
+                )
+                .permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
                 and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(customJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }

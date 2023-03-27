@@ -1,6 +1,6 @@
 package gr.mindthecode.eshop.security.jwt;
 
-import gr.mindthecode.eshop.service.JwtUtil;
+import gr.mindthecode.eshop.service.impl.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
