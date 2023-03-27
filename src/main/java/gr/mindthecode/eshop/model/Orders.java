@@ -25,11 +25,6 @@ public class Orders {
     @JsonIgnore
     private Collection<ShoppingCart> orderProducts = new ArrayList<>();
 
-    /*@ManyToOne(cascade = CascadeType.PERSIST)
-    @Lazy(false)
-    @MapsId("id")
-    @JsonIgnore
-    */
     @ManyToOne( cascade = {CascadeType.PERSIST})
     @JoinColumn(
             name="user_id",

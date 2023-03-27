@@ -1,5 +1,6 @@
 package gr.mindthecode.eshop.controller;
 
+import gr.mindthecode.eshop.dto.NewOrderDto;
 import gr.mindthecode.eshop.dto.ProductQuantity;
 import gr.mindthecode.eshop.model.Orders;
 import gr.mindthecode.eshop.model.Product;
@@ -12,7 +13,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -78,6 +78,11 @@ public class test {
     @PostMapping("/cart/checkout")
     public Orders sendOrder(@RequestParam String address){
         return shoppingCartService.sendOrder(address);
+    }
+
+    @GetMapping("/cart")
+    public NewOrderDto getCart(){
+        return shoppingCartService.getCart();
     }
 
 }

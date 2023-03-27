@@ -22,12 +22,6 @@ public class ShoppingCart {
     @JsonIgnore
     private Product products;
 
-    /*@ManyToOne
-    @Lazy(false)
-    @MapsId("id")
-    @JsonIgnore
-
-     */
     @ManyToOne( cascade = {CascadeType.PERSIST})
     @JoinColumn(
             name="user_id",

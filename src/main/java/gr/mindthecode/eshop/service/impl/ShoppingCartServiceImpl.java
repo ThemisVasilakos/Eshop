@@ -1,5 +1,7 @@
 package gr.mindthecode.eshop.service.impl;
 
+import gr.mindthecode.eshop.dto.NewOrderDto;
+import gr.mindthecode.eshop.dto.ProductQuantity;
 import gr.mindthecode.eshop.model.*;
 import gr.mindthecode.eshop.repository.OrdersRepository;
 import gr.mindthecode.eshop.repository.ProductRepository;
@@ -11,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,8 +53,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         Orders finalOrder;
         Optional<Orders> order = ordersRepository.findByStatusAndUsers("pending",user);
+
         if(order.isPresent()){
             finalOrder = order.get();
+
+            //Check if the cart has the same product again and increasing quantity
+            List<ShoppingCart> carts = shoppingCartRepository.findAll();
+            for(int i=0;i<carts.size();i++){
+                if(carts.get(i).getId().getOrdersId()==finalOrder.getOrdersId()){
+                    if(productId == carts.get(i).getId().getProductId()){
+                        carts.get(i).setQuantity(carts.get(i).getQuantity()+quantity);
+                        shoppingCartRepository.save(carts.get(i));
+                    }
+                }
+            }
+
             totalCost = finalOrder.getTotalCost();
             totalCost+=check.get().getProductPrice()*quantity;
             finalOrder.setTotalCost(totalCost);
@@ -96,8 +112,44 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public List<ShoppingCart> findAll() {
-        return shoppingCartRepository.findAll();
+    public NewOrderDto getCart() {
+        UserDetails userDetailService = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetailService.getUsername();
+        User user =  userRepository.findByUsername(username);
+
+        Optional<Orders> order = ordersRepository.findByStatusAndUsers("pending",user);
+        if(order.isEmpty()){
+            throw new RuntimeException("Order not found");
+        }
+
+        List<ShoppingCart> carts = shoppingCartRepository.findAll();
+        List<ProductQuantity> productQuantities = new ArrayList<>();
+
+        for(int i=0;i<carts.size();i++){
+
+            Integer prodId;
+            Product tmp;
+            ProductQuantity productQuantity = new ProductQuantity();
+
+            if(carts.get(i).getId().getOrdersId()==order.get().getOrdersId()){
+                prodId = carts.get(i).getId().getProductId();
+                tmp = productRepository.findByProductId(prodId);
+
+                productQuantity.setProductId(tmp.getProductId());
+                productQuantity.setQuantity(carts.get(i).getQuantity());
+                productQuantity.setProductPrice(tmp.getProductPrice());
+                productQuantity.setProductDescription(tmp.getProductDescription());
+                productQuantity.setCategory(tmp.getCategory());
+                productQuantities.add(productQuantity);
+            }
+
+        }
+
+        NewOrderDto newOrderDto = new NewOrderDto();
+        newOrderDto.setProducts(productQuantities);
+        newOrderDto.setTotalCost(order.get().getTotalCost());
+
+        return newOrderDto;
     }
 
 }

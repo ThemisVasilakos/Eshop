@@ -26,7 +26,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Orders> findByStatus() {
-        return ordersRepository.findByStatus("pending");
+        return ordersRepository.findByStatus("completed");
     }
 
     @Override

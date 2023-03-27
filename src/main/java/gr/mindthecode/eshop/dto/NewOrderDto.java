@@ -6,6 +6,7 @@ import java.util.Collection;
 
 public class NewOrderDto implements Serializable {
     private String address;
+    private Double totalCost;
     private Collection<ProductQuantity> products;
 
     public NewOrderDto() {
@@ -30,4 +31,11 @@ public class NewOrderDto implements Serializable {
         this.products = products;
     }
 
+    public Double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(Double totalCost) {
+        this.totalCost = totalCost;
+    }
 }

@@ -21,7 +21,6 @@ public class Product {
 
     private Double productPrice;
 
-
     @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnore
