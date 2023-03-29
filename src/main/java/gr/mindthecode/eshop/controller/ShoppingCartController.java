@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/eshop")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ShoppingCartController {
 
     private ShoppingCartService shoppingCartService;

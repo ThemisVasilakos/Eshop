@@ -60,7 +60,7 @@ public class SpringSecurityConfig {
                         "/eshop/products/delete/{id}","/eshop/orders")
                 .hasRole("ADMIN")
                 .requestMatchers ("/eshop/login","/eshop/register","eshop/products/{id}","/eshop/cart",
-                        "/eshop/cart/add","/eshop/cart/remove","/eshop/cart/checkout"
+                        "/eshop/cart/add","/eshop/cart/remove","/eshop/cart/checkout","/eshop/role"
                 )
                 .permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).

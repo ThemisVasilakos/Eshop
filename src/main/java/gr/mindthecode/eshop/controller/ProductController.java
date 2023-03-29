@@ -9,8 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/eshop/products")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProductController {
     private ProductService productService;
 
@@ -19,9 +22,9 @@ public class ProductController {
     }
 
     @PostMapping("/create-or-update")
-    public Product createProduct(@RequestBody Product product){
+    public Product createProduct(@RequestParam Optional<Integer> productId, @RequestBody Product product){
         try {
-            return productService.createOrUpdateProduct(product.getProductId(), product);
+            return productService.createOrUpdateProduct(productId.isPresent() ? productId.get() : null , product);
         } catch (Exception e) {
             throw new HttpClientErrorException(HttpStatusCode.valueOf(400), e.getMessage());
         }

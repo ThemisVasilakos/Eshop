@@ -124,7 +124,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         Optional<Orders> order = ordersRepository.findByStatusAndUsers("pending",user);
         if(order.isEmpty()){
-            throw new RuntimeException("Order not found");
+            return new NewOrderDto();
         }
 
         List<ShoppingCart> carts = shoppingCartRepository.findAll();
