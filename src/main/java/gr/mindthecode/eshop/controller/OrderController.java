@@ -4,15 +4,13 @@ import gr.mindthecode.eshop.model.Orders;
 import gr.mindthecode.eshop.repository.OrdersRepository;
 import gr.mindthecode.eshop.service.OrderService;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/eshop")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class OrderController {
 
     private OrderService orderService;
