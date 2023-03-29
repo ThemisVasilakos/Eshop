@@ -50,4 +50,9 @@ public class AuthenticationController {
     public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
         return ResponseEntity.ok(userDetailService.save(user));
     }
+
+    @GetMapping("/role")
+    public String getRole(){
+        return userDetailService.getRole();
+    }
 }
