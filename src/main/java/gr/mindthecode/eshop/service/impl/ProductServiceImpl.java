@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
@@ -18,9 +20,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createOrUpdateProduct(Integer id,Product product) throws Exception {
+        Optional<Product> check;
         if (id != null) {
-            if (!id.equals(product.getProductId())) {
-                throw new Exception("id in path does not patch id in body");
+             check = productRepository.findProductByProductId(id);
+            if (check.isPresent()) {
+                check.get().setProductDescription(product.getProductDescription());
+                check.get().setProductPrice(product.getProductPrice());
+                check.get().setCategory(product.getCategory());
+                return productRepository.save(check.get());
+            }
+            else{
+                throw new Exception("no product found");
             }
         }
         return productRepository.save(product);
