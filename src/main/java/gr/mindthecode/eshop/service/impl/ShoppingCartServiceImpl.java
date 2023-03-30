@@ -9,6 +9,7 @@ import gr.mindthecode.eshop.repository.ShoppingCartRepository;
 import gr.mindthecode.eshop.repository.UserRepository;
 import gr.mindthecode.eshop.service.ShoppingCartService;
 import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -57,6 +58,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         if(order.isPresent()){
             finalOrder = order.get();
+
+            //Check if the cart has the same product again and increasing quantity
+            List<ShoppingCart> carts = shoppingCartRepository.findAll();
+            for(int i=0;i<carts.size();i++){
+                if(carts.get(i).getId().getOrdersId()==finalOrder.getOrdersId()){
+                    if(productId == carts.get(i).getId().getProductId()){
+                        Integer finalQuantity = carts.get(i).getQuantity()+quantity;
+                        carts.get(i).setQuantity(finalQuantity);
+                        shoppingCartRepository.updateQuantity(finalQuantity,carts.get(i).getId().getOrdersId());
+                    }
+                }
+            }
 
             totalCost = finalOrder.getTotalCost();
             totalCost+=check.get().getProductPrice()*quantity;
