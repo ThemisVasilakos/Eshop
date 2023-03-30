@@ -12,4 +12,5 @@ public interface OrderService {
                            int page,
                            int size,
                            String sort);
+    List<Orders> getMyOrders();
 }

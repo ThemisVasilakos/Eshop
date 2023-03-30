@@ -30,13 +30,8 @@ public class OrderController {
     }
 
     @GetMapping("/orders/user")
-    public Page<Orders> getMyOrders(
-            @RequestParam(required = false) String address,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size,
-            @RequestParam(defaultValue = "ASC", required = false) String sort
-    ){
-        return orderService.getOrders(address,page, size, sort);
+    public List<Orders> getMyOrders(){
+        return orderService.getMyOrders();
     }
 
 }
