@@ -1,5 +1,6 @@
 package gr.mindthecode.eshop.service;
 
+import gr.mindthecode.eshop.dto.ProductQuantity;
 import gr.mindthecode.eshop.model.Orders;
 import org.springframework.data.domain.Page;
 
@@ -13,4 +14,6 @@ public interface OrderService {
                            int size,
                            String sort);
     List<Orders> getMyOrders();
+    List<ProductQuantity> getProductsFromOrder(Integer id);
+    Orders validateOrder(Integer id);
 }

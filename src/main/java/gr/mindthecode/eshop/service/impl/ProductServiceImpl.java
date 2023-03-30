@@ -27,6 +27,7 @@ public class ProductServiceImpl implements ProductService {
                 check.get().setProductDescription(product.getProductDescription());
                 check.get().setProductPrice(product.getProductPrice());
                 check.get().setCategory(product.getCategory());
+                check.get().setAvailable(product.getAvailable());
                 return productRepository.save(check.get());
             }
             else{
@@ -37,9 +38,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProduct(Integer id) {
+    public Product deleteProduct(Integer id) {
         Product match = productRepository.findById(id).orElseThrow();
         productRepository.delete(match);
+        return new Product();
     }
 
     @Override

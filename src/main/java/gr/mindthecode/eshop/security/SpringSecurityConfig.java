@@ -57,10 +57,11 @@ public class SpringSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests().requestMatchers ("/eshop/products/create-or-update",
-                        "/eshop/products/delete/{id}","/eshop/orders")
+                        "/eshop/products/delete/{id}","/eshop/orders","/eshop/orders/validate")
                 .hasRole("ADMIN")
                 .requestMatchers ("/eshop/login","/eshop/register","eshop/products/{id}","/eshop/cart",
-                        "/eshop/cart/add","/eshop/cart/remove","/eshop/cart/checkout","/eshop/role","eshop/orders/user"
+                        "/eshop/cart/add","/eshop/cart/remove","/eshop/cart/checkout","/eshop/role","eshop/orders/user",
+                        "/eshop/orders/products/{id}"
                 )
                 .permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
