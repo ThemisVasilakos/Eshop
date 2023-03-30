@@ -1,9 +1,14 @@
 package gr.mindthecode.eshop.service.impl;
 
-import gr.mindthecode.eshop.dto.NewOrderDto;
+
+import gr.mindthecode.eshop.dto.ProductQuantity;
 import gr.mindthecode.eshop.model.Orders;
+import gr.mindthecode.eshop.model.Product;
+import gr.mindthecode.eshop.model.ShoppingCart;
 import gr.mindthecode.eshop.model.User;
 import gr.mindthecode.eshop.repository.OrdersRepository;
+import gr.mindthecode.eshop.repository.ProductRepository;
+import gr.mindthecode.eshop.repository.ShoppingCartRepository;
 import gr.mindthecode.eshop.repository.UserRepository;
 import gr.mindthecode.eshop.service.OrderService;
 import org.springframework.data.domain.Page;
@@ -13,19 +18,26 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private OrdersRepository ordersRepository;
     private UserRepository userRepository;
+    private ProductRepository productRepository;
+    private ShoppingCartRepository shoppingCartRepository;
 
-    public OrderServiceImpl(OrdersRepository ordersRepository,UserRepository userRepository){
+    public OrderServiceImpl(OrdersRepository ordersRepository,UserRepository userRepository,ProductRepository productRepository,
+                            ShoppingCartRepository shoppingCartRepository){
         this.ordersRepository = ordersRepository;
         this.userRepository = userRepository;
+        this.productRepository = productRepository;
+        this.shoppingCartRepository = shoppingCartRepository;
     }
 
     @Override
@@ -69,7 +81,45 @@ public class OrderServiceImpl implements OrderService {
         User user =  userRepository.findByUsername(username);
 
         List<Orders> myOrders = ordersRepository.findOrdersByStatusAndUsers("submitted",user);
+        List<Orders> myOrders2 = ordersRepository.findOrdersByStatusAndUsers("completed",user);
 
+        myOrders.addAll(myOrders2);
         return myOrders;
+    }
+
+    public  List<ProductQuantity> getProductsFromOrder(Integer id){
+        Orders order = ordersRepository.findOrdersByStatusAndOrdersId("submitted",id);
+
+        List<ShoppingCart> cart = shoppingCartRepository.findAll();
+        List<Product> products = new ArrayList<>();
+        List<Integer> quantities = new ArrayList<>();
+        for(int i=0;i< cart.size();i++){
+            Integer tmpId = cart.get(i).getId().getProductId();
+            Integer tmpQuantity = cart.get(i).getQuantity();
+            Product tmpProd = productRepository.findByProductId(tmpId);
+            products.add(tmpProd);
+            quantities.add(tmpQuantity);
+        }
+
+        List<ProductQuantity> finalProds = new ArrayList<>();
+        for(int i=0;i< products.size();i++){
+           ProductQuantity productQuantity = new ProductQuantity();
+
+           productQuantity.setProductId(products.get(i).getProductId());
+           productQuantity.setProductDescription(products.get(i).getProductDescription());
+           productQuantity.setQuantity(quantities.get(i));
+           productQuantity.setProductPrice(products.get(i).getProductPrice());
+           productQuantity.setCategory(products.get(i).getCategory());
+
+           finalProds.add(productQuantity);
+        }
+
+        return finalProds;
+    }
+
+    public Orders validateOrder(Integer id){
+        Orders orders = ordersRepository.findOrdersByStatusAndOrdersId("submitted",id);
+        orders.setStatus("completed");
+        return  ordersRepository.save(orders);
     }
 }

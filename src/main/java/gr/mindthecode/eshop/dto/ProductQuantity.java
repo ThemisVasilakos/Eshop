@@ -12,6 +12,8 @@ public class ProductQuantity implements Serializable {
 
     private Double productPrice;
 
+    private String available;
+
     //Getters and Setters
     public Integer getProductId() {
         return productId;
@@ -51,5 +53,13 @@ public class ProductQuantity implements Serializable {
 
     public void setProductPrice(Double productPrice) {
         this.productPrice = productPrice;
+    }
+
+    public String getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(String available) {
+        this.available = available;
     }
 }

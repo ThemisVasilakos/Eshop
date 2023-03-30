@@ -1,5 +1,6 @@
 package gr.mindthecode.eshop.controller;
 
+import gr.mindthecode.eshop.dto.ProductQuantity;
 import gr.mindthecode.eshop.model.Orders;
 import gr.mindthecode.eshop.repository.OrdersRepository;
 import gr.mindthecode.eshop.service.OrderService;
@@ -32,6 +33,16 @@ public class OrderController {
     @GetMapping("/orders/user")
     public List<Orders> getMyOrders(){
         return orderService.getMyOrders();
+    }
+
+    @GetMapping("/orders/products/{id}")
+    public List<ProductQuantity> getProductOrders(@PathVariable Integer id){
+        return orderService.getProductsFromOrder(id);
+    }
+
+    @PostMapping("/orders/validate")
+    public Orders validateOrder(@RequestParam Integer ordersId){
+        return orderService.validateOrder(ordersId);
     }
 
 }

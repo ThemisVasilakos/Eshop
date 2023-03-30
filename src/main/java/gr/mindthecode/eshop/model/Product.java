@@ -21,6 +21,8 @@ public class Product {
 
     private Double productPrice;
 
+    private String available;
+
     @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnore
@@ -70,5 +72,13 @@ public class Product {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(String available) {
+        this.available = available;
     }
 }

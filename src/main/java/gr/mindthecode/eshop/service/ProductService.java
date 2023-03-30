@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 
 public interface ProductService {
     Product createOrUpdateProduct(Integer id,Product product) throws Exception;
-    void deleteProduct(Integer id);
+    Product deleteProduct(Integer id);
     public abstract Product getProductById(Integer id);
     Page<Product> getProducts(String description,
                               String category,
