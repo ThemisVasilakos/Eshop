@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -108,17 +109,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public  List<ProductQuantity> getProductsFromOrder(Integer id){
-        Orders order = ordersRepository.findOrdersByStatusAndOrdersId("submitted",id);
+        Optional<Orders> order = ordersRepository.findById(id);
 
         List<ShoppingCart> cart = shoppingCartRepository.findAll();
         List<Product> products = new ArrayList<>();
         List<Integer> quantities = new ArrayList<>();
         for(int i=0;i< cart.size();i++){
-            Integer tmpId = cart.get(i).getId().getProductId();
-            Integer tmpQuantity = cart.get(i).getQuantity();
-            Product tmpProd = productRepository.findByProductId(tmpId);
-            products.add(tmpProd);
-            quantities.add(tmpQuantity);
+            if(cart.get(i).getId().getOrdersId()==order.get().getOrdersId()){
+                Integer tmpId = cart.get(i).getId().getProductId();
+                Integer tmpQuantity = cart.get(i).getQuantity();
+                Product tmpProd = productRepository.findByProductId(tmpId);
+                products.add(tmpProd);
+                quantities.add(tmpQuantity);
+            }
+
         }
 
         List<ProductQuantity> finalProds = new ArrayList<>();
