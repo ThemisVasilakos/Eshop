@@ -23,16 +23,17 @@ public class OrderController {
     @GetMapping("/orders")
     public Page<Orders> getOrdersByStatus(
             @RequestParam(required = false) String address,
+            @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size,
             @RequestParam(defaultValue = "ASC", required = false) String sort
     ){
-        return orderService.getOrders(address,page, size, sort);
+        return orderService.getOrders(address,status,page, size, sort);
     }
 
     @GetMapping("/orders/user")
-    public List<Orders> getMyOrders(){
-        return orderService.getMyOrders();
+    public List<Orders> getMyOrders(@RequestParam(required = false) String status){
+        return orderService.getMyOrders(status);
     }
 
     @GetMapping("/orders/products/{id}")

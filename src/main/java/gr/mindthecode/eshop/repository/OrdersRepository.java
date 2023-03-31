@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface OrdersRepository extends JpaRepository<Orders,Integer> {
     Page<Orders> findByAddressContaining(String address, Pageable pageable);
+    Page<Orders> findByAddressContainingAndStatus(String address, String status,Pageable pageable);
     Optional<Orders> findByStatusAndUsers(String status, User user);
     List<Orders> findOrdersByStatusAndUsers(String status, User user);
     Page<Orders> findByStatus(String status,Pageable pageable);

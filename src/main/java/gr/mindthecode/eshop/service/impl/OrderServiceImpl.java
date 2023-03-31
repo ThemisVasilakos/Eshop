@@ -58,33 +58,53 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Orders> getOrders(String address, int page, int size, String sort) {
+    public Page<Orders> getOrders(String address,String status, int page, int size, String sort) {
         PageRequest paging = PageRequest
                 .of(page, size)
                 .withSort(sort.equalsIgnoreCase("ASC") ?
                         Sort.by("totalCost").ascending() :
                         Sort.by("totalCost").descending());
 
-        Page<Orders> res;
-        if (address == null) {
+        Page<Orders> res = null;
+        if (address == null && status==null) {
             res = ordersRepository.findAll(paging);
-        } else {
+        } 
+        if(address != null && status==null){
             res = ordersRepository.findByAddressContaining(address,paging);
+        }//
+        if(address == null && status!=null){
+            res = ordersRepository.findByStatus(status,paging);
+        }
+        if(address != null && status!=null){
+            res = ordersRepository.findByAddressContainingAndStatus(address,status,paging);
         }
 
         return res;
     }
 
-    public List<Orders> getMyOrders(){
+    public List<Orders> getMyOrders(String status){
         UserDetails userDetailService = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetailService.getUsername();
         User user =  userRepository.findByUsername(username);
+        List<Orders> finalList = new ArrayList<>();
 
         List<Orders> myOrders = ordersRepository.findOrdersByStatusAndUsers("submitted",user);
         List<Orders> myOrders2 = ordersRepository.findOrdersByStatusAndUsers("completed",user);
 
-        myOrders.addAll(myOrders2);
-        return myOrders;
+        if(status==null){
+            myOrders.addAll(myOrders2);
+            finalList.addAll(myOrders);
+        }else{
+            if(status.equals("submitted")){
+                finalList.addAll(myOrders);
+            }
+            if(status.equals("completed")){
+                finalList.addAll(myOrders2);
+            }
+        }
+
+
+        return finalList;
     }
 
     public  List<ProductQuantity> getProductsFromOrder(Integer id){

@@ -24,7 +24,7 @@ public class ShoppingCartController {
 
     @PostMapping("/cart/add")
     public ShoppingCart addToCart(@RequestParam Integer productId
-            , @RequestParam(defaultValue = "0") int quantity){
+            , @RequestParam(defaultValue = "0") int quantity) throws Exception {
         return shoppingCartService.addToCart(productId,quantity);
     }
 

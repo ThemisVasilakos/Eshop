@@ -39,7 +39,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     @Transactional
-    public ShoppingCart addToCart(Integer productId, int quantity) {
+    public ShoppingCart addToCart(Integer productId, int quantity) throws Exception {
         UserDetails userDetailService = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetailService.getUsername();
         User user =  userRepository.findByUsername(username);
@@ -64,9 +64,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             for(int i=0;i<carts.size();i++){
                 if(carts.get(i).getId().getOrdersId()==finalOrder.getOrdersId()){
                     if(productId == carts.get(i).getId().getProductId()){
-                        Integer finalQuantity = carts.get(i).getQuantity()+quantity;
-                        carts.get(i).setQuantity(finalQuantity);
-                        shoppingCartRepository.updateQuantity(finalQuantity,carts.get(i).getId().getOrdersId());
+                        throw new Exception("Item already in cart");
                     }
                 }
             }
